@@ -44,7 +44,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         queryset = Manufacturer.objects.all()
-        query = self.request.GET.get("q")
+        query = self.request.GET.get("query")
         if query:
             queryset = queryset.filter(
                 name__icontains=query
@@ -53,7 +53,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["q"] = self.request.GET.get("q", "")
+        context["query"] = self.request.GET.get("query", "")
         return context
 
 
@@ -77,20 +77,17 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
-    queryset = Car.objects.select_related("manufacturer")
 
     def get_queryset(self):
-        queryset = Car.objects.all()
-        query = self.request.GET.get("q")
+        queryset = Car.objects.select_related("manufacturer")
+        query = self.request.GET.get("query")
         if query:
-            queryset = queryset.filter(
-                model__icontains=query
-            )
+            queryset = queryset.filter(model__icontains=query)
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["q"] = self.request.GET.get("q", "")
+        context["query"] = self.request.GET.get("query", "")
         return context
 
 
@@ -121,18 +118,18 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         queryset = Driver.objects.all()
-        q = self.request.GET.get("q")
+        q = self.request.GET.get("query")
         if q:
             queryset = queryset.filter(
-                Q(username__icontains=q) |
-                Q(first_name__icontains=q) |
-                Q(last_name__icontains=q)
+                Q(username__icontains=q)
+                | Q(first_name__icontains=q) 
+                | Q(last_name__icontains=q)
             )
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["q"] = self.request.GET.get("q", "")
+        context["query"] = self.request.GET.get("query", "")
         return context
 
 
