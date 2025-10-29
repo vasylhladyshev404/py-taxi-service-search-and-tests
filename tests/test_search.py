@@ -19,11 +19,17 @@ class DriverSearchTest(TestCase):
         self.assertContains(response, "maria")
 
     def test_search_query_matches_one(self):
-        response = self.client.get(reverse("taxi:driver-list"), {"query": "alex"})
+        response = self.client.get(
+            reverse("taxi:driver-list"),
+            {"query": "alex"}
+        )
         self.assertContains(response, "alex")
         self.assertNotContains(response, "maria")
 
     def test_search_query_no_match(self):
-        response = self.client.get(reverse("taxi:driver-list"), {"query": "zzz"})
+        response = self.client.get(
+            reverse("taxi:driver-list"),
+            {"query": "zzz"}
+        )
         self.assertNotContains(response, "alex")
         self.assertNotContains(response, "maria")
