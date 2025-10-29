@@ -12,6 +12,7 @@ class DriverSearchTest(TestCase):
         self.driver2 = user.objects.create_user(
             username="maria", password="pass123"
         )
+        self.client.force_login(self.driver1)
 
     def test_search_no_query_returns_all(self):
         response = self.client.get(reverse("taxi:driver-list"))
